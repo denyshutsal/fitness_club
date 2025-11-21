@@ -18,6 +18,7 @@
                         <thead>
                         <tr>
                             <th class="border px-4 py-2">ID</th>
+                            <th class="border px-4 py-2">Role</th>
                             <th class="border px-4 py-2">Name</th>
                             <th class="border px-4 py-2">Email</th>
                             <th class="border px-4 py-2">Created</th>
@@ -27,6 +28,7 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <td class="px-4 py-2 text-center">{{ $user->id }}</td>
+                                    <td class="px-4 py-2 text-center">{{ $user->role }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->name }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->email }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->created_at }}</td>
@@ -34,6 +36,20 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                @if(session('success'))
+                    <div class="alert alert-success text-center text-gray-900 dark:text-gray-100">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                        <a href="{{ route('users.create') }}" class="btn btn-primary">
+                            Create User
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
