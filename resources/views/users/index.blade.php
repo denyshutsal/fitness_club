@@ -35,16 +35,19 @@
                                     <td class="px-4 py-2 text-center">{{ $user->created_at }}</td>
                                     <td class="px-4 py-2 text-center">
                                         <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Show</a>
-                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm text-green-600">Edit</a>
-
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm text-red-600"
-                                                    onclick="return confirm('Are you sure you want to delete this user?')">
-                                                Delete
-                                            </button>
-                                        </form>
+                                        @if($user->role !== 'admin')
+                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm text-green-600">Edit</a>
+                                        @endif
+                                        @if($user->role !== 'admin')
+                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm text-red-600"
+                                                        onclick="return confirm('Are you sure you want to delete this user?')">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
