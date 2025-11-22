@@ -22,6 +22,7 @@
                             <th class="border px-4 py-2">Name</th>
                             <th class="border px-4 py-2">Email</th>
                             <th class="border px-4 py-2">Created</th>
+                            <th class="border px-4 py-2">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -32,14 +33,33 @@
                                     <td class="px-4 py-2 text-center">{{ $user->name }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->email }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->created_at }}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Show</a>
+                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm text-green-600">Edit</a>
+
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm text-red-600"
+                                                    onclick="return confirm('Are you sure you want to delete this user?')">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
 
+                @if(session('error'))
+                    <div class="alert alert-success text-center text-red-600">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 @if(session('success'))
-                    <div class="alert alert-success text-center text-gray-900 dark:text-gray-100">
+                    <div class="alert alert-success text-center text-green-600">
                         {{ session('success') }}
                     </div>
                 @endif

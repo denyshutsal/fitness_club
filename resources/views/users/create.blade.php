@@ -15,19 +15,30 @@
 
                     <h1 class="text-2xl font-bold mb-4">Users List</h1>
 
+                    {{-- Validation error message --}}
+                    @if ($errors->any())
+                        <div class="alert alert-danger text-red-600 text-center">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('users.store') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
                         @csrf
                         <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
                             <div class="sm:col-span-2">
                                 <label for="name" class="block text-sm/6 font-semibold text-white">Name</label>
                                 <div class="mt-2.5">
-                                    <input id="name" type="text" name="name" value="{{ old('name') }}" autocomplete="name" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    <input id="name" type="text" name="name" value="{{ old('name') }}" autocomplete="name" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
                                 <label for="email" class="block text-sm/6 font-semibold text-white">Email</label>
                                 <div class="mt-2.5">
-                                    <input id="email" type="email" name="email" autocomplete="email" value="{{ old('email') }}" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    <input id="email" type="email" name="email" autocomplete="email" required value="{{ old('email') }}" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
