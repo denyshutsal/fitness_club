@@ -13,18 +13,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    <h1 class="text-2xl font-bold mb-4">Users List</h1>
-
-                    {{-- Validation error message --}}
-                    @if ($errors->any())
-                        <div class="alert alert-danger text-red-600 text-center">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                    <h1 class="text-2xl font-bold mb-4">Create a user</h1>
 
                     <form action="{{ route('users.store') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
                         @csrf
@@ -33,18 +22,33 @@
                                 <label for="name" class="block text-sm/6 font-semibold text-white">Name</label>
                                 <div class="mt-2.5">
                                     <input id="name" type="text" name="name" value="{{ old('name') }}" autocomplete="name" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    @error('name')
+                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
                                 <label for="email" class="block text-sm/6 font-semibold text-white">Email</label>
                                 <div class="mt-2.5">
                                     <input id="email" type="email" name="email" autocomplete="email" required value="{{ old('email') }}" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    @error('email')
+                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
                                 <label for="password" class="block text-sm/6 font-semibold text-white">Password</label>
                                 <div class="mt-2">
-                                    <input id="password" type="password" name="password" autocomplete="current-password" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    <input id="password" type="password" name="password" autocomplete="new-password" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    @error('password')
+                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="password_confirmation" class="block text-sm/6 font-semibold text-white">Re-enter your password for verification</label>
+                                <div class="mt-2">
+                                    <input id="password_confirmation" type="password" name="password_confirmation" autocomplete="new-password" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                                 </div>
                             </div>
                         </div>

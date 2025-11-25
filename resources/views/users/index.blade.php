@@ -34,11 +34,10 @@
                                     <td class="px-4 py-2 text-center">{{ $user->email }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->created_at }}</td>
                                     <td class="px-4 py-2 text-center">
-                                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Show</a>
+                                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Profile</a>
                                         @if($user->role !== 'admin')
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm text-green-600">Edit</a>
-                                        @endif
-                                        @if($user->role !== 'admin')
+                                            <a href="{{ route('users.password.edit', $user->id) }}" class="btn btn-primary btn-sm text-blue-600">Change Password</a>
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')

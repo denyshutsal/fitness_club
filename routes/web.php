@@ -22,7 +22,15 @@ require __DIR__.'/auth.php';
 
 Route::resource('users', UserController::class);
 
+// All users
 Route::get('/users', [UserController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('users.index');
+
+// Update user password
+Route::get('/users/{user}/password', [UserController::class, 'editPassword'])
+    ->name('users.password.edit');
+
+Route::post('/users/{user}/password', [UserController::class, 'updatePassword'])
+    ->name('users.password.update');
 

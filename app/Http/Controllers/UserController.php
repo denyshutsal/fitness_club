@@ -32,7 +32,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:6'],
+            'password' => ['required', 'min:6', 'confirmed'],
         ]);
 
         $user = \App\Models\User::create([
@@ -76,11 +76,32 @@ class UserController extends Controller
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
         ]);
 
+
         $user->update($data);
 
         return redirect()
             ->route('users.index')
             ->with('success', 'User updated successfully');
+    }
+
+    /**
+     *  Update user password.
+     */
+    public function editPassword(User $user)
+    {
+        return view('users.edit-password', compact('user'));
+    }
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'password' => ['required', 'min:6', 'confirmed'],
+        ]);
+
+        $user->update([
+            'password' => bcrypt($request->password),
+        ]);
+
+        return redirect()->route('users.index')->with('success', 'Password updated!');
     }
 
     /**
