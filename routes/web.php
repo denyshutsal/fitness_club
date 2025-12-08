@@ -3,34 +3,25 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::redirect('/', '/login');
-
 Route::redirect('/register', '/login');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+    // Users CRUD
+    Route::resource('users', UserController::class);
+
+    Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 });
 
 require __DIR__.'/auth.php';
-
-Route::resource('users', UserController::class);
-
-// All users
-Route::get('/users', [UserController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('users.index');
-
-// Update user password
-Route::get('/users/{user}/password', [UserController::class, 'editPassword'])
-    ->name('users.password.edit');
-
-Route::post('/users/{user}/password', [UserController::class, 'updatePassword'])
-    ->name('users.password.update');
-

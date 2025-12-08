@@ -29,17 +29,33 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Clear your phone of all characters except numbers
+        $phone = $request->phone ? preg_replace('/\D+/', '', $request->phone) : null;
+
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'min:6', 'confirmed'],
-        ]);
+            'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
+            ], [
+           'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
+            ]
+        );
 
-        $user = \App\Models\User::create([
+        $data['phone'] = $phone;
+
+        $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        // Create a phone (can be null)
+        if (!empty($data['phone'])) {
+            $user->phones()->create([
+                'phone' => $data['phone'],
+            ]);
+        }
 
         return redirect()
             ->route('users.index')
@@ -55,7 +71,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource
      */
     public function edit(User $user)
     {
@@ -63,45 +79,52 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage (including password and phone).
      */
     public function update(Request $request, User $user)
     {
-        if ($user->role === 'admin') {
-            return redirect()->route('users.index')->with('error', 'Forbidden');
-        }
+        
+        // Clear your phone of all characters except numbers
+        $phone = $request->phone ? preg_replace('/\D+/', '', $request->phone) : null;
 
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
+            'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
+            'password' => ['nullable','min:6','confirmed'],
+        ], [
+            'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
         ]);
 
+        // Update name and email
+        $user->update([
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ]);
 
-        $user->update($data);
+        // Update or create phone
+        $data['phone'] = $phone;
+        
+        if ($user->phones()->exists()) {
+            $user->phones()->first()->update([
+                'phone' => $data['phone'],
+            ]);
+        } else {
+            $user->phones()->create([
+                'phone' => $data['phone'],
+            ]);
+        }
 
+        // Update password if provided
+        if (!empty($data['password'])) {
+            $user->update([
+                'password' => bcrypt($data['password']),
+            ]);
+        }
+        
         return redirect()
             ->route('users.index')
             ->with('success', 'User updated successfully');
-    }
-
-    /**
-     *  Update user password.
-     */
-    public function editPassword(User $user)
-    {
-        return view('users.edit-password', compact('user'));
-    }
-    public function updatePassword(Request $request, User $user)
-    {
-        $request->validate([
-            'password' => ['required', 'min:6', 'confirmed'],
-        ]);
-
-        $user->update([
-            'password' => bcrypt($request->password),
-        ]);
-
-        return redirect()->route('users.index')->with('success', 'Password updated!');
     }
 
     /**
@@ -109,10 +132,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->role === 'admin') {
-            return redirect()->route('users.index')->with('error', 'Forbidden');
-        }
-
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }

@@ -37,6 +37,15 @@
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
+                                <label for="phone" class="block text-sm/6 font-semibold text-white">Phone</label>
+                                <div class="mt-2.5">
+                                    <input id="phone" type="text" name="phone" value="{{ old('phone') }}" placeholder="+7XXXXXXXXXX" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
+                                    @error('phone')
+                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
                                 <label for="password" class="block text-sm/6 font-semibold text-white">Password</label>
                                 <div class="mt-2">
                                     <input id="password" type="password" name="password" autocomplete="new-password" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
