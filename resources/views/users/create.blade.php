@@ -13,7 +13,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    <h1 class="text-2xl font-bold mb-4">Create a user</h1>
+                    <h1 class="text-center text-2xl font-bold mb-4">Create a user</h1>
 
                     <form action="{{ route('users.store') }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
                         @csrf
@@ -46,6 +46,15 @@
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
+                                <label for="role" class="block text-sm/6 font-semibold text-white">Role</label>
+                                <div class="mt-2.5">
+                                    <select id="role" name="role" autocomplete="role" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
+                                        <option value="employee">Employee</option>
+                                        <option value="visitor">Visitor</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
                                 <label for="password" class="block text-sm/6 font-semibold text-white">Password</label>
                                 <div class="mt-2">
                                     <input id="password" type="password" name="password" autocomplete="new-password" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
@@ -68,7 +77,7 @@
 
                 </div>
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="text-center p-6 text-gray-900 dark:text-gray-100">
                         <a href="{{ route('users.index') }}" class="btn btn-primary">
                             List of users
                         </a>

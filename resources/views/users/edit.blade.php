@@ -14,7 +14,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-center text-2xl font-bold mb-4">Edit a user</h2>
 
-                    {{-- Name, Email, Phone block --}}
+                    {{-- Name, Email, Role, Phone block --}}
                     <form action="{{ route('users.update', $user->id) }}" method="POST" class="mx-auto mt-16 max-w-xl sm:mt-20">
                         @csrf
                         @method('PUT')
@@ -25,8 +25,17 @@
                                 <div class="mt-2.5">
                                     <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" autocomplete="name" required class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                                     @error('name')
-                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                                     @enderror
+                                </div>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label for="role" class="block text-sm/6 font-semibold text-white">Role</label>
+                                <div class="mt-2.5">
+                                    <select id="role" name="role" autocomplete="role" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
+                                        <option value="employee">Employee</option>
+                                        <option value="visitor">Visitor</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
@@ -34,7 +43,7 @@
                                 <div class="mt-2.5">
                                     <input id="email" type="email" name="email" required autocomplete="email" value="{{ old('email', $user->email) }}" class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                                     @error('email')
-                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -44,7 +53,7 @@
                                     <input id="phone" type="text" name="phone" value="{{ old('phone', $user->phones->first()?->phone ? '+' . $user->phones->first()->phone : '') }}" placeholder="+7XXXXXXXXXX"
                                            class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500" />
                                     @error('phone')
-                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>
@@ -72,7 +81,7 @@
                                     <input type="password" name="password" id="password" required autocomplete="new-password"
                                            class="block w-full rounded-md bg-white/5 px-3.5 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500">
                                     @error('password')
-                                    <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                                     @enderror
                                 </div>
                             </div>

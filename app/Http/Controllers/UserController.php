@@ -35,6 +35,7 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
+            'role' => ['required', 'in:employee,visitor'],
             'password' => ['required', 'min:6', 'confirmed'],
             'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
             ], [
@@ -47,6 +48,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'role' => $data['role'],
             'password' => bcrypt($data['password']),
         ]);
 
@@ -91,6 +93,7 @@ class UserController extends Controller
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
             'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
+            'role' => ['required', 'in:employee,visitor'],
             'password' => ['nullable','min:6','confirmed'],
         ], [
             'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
@@ -100,6 +103,7 @@ class UserController extends Controller
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
+            'role' => $data['role'],
         ]);
 
         // Update or create phone
