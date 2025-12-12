@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,19 +17,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {   
-        $admin = User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-        ]);
-
-        $admin->phones()->create([
-            'phone' => '71234567890',
-        ]);
-
         $user = User::factory()
             ->count(10)
+            ->state(new Sequence(
+                ['role' => 'visitor'],
+                ['role' => 'employee']
+            ))
             ->has(Phone::factory())
             ->create();
     }
