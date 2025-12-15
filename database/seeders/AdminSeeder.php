@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Phone;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,11 +15,11 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-         $admin = User::create([
+        $admin = User::create([
+            'role_id' => Role::where('role', 'admin')->first()->id,
             'name' => 'Admin',
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
-            'role' => 'admin',
         ]);
 
         $admin->phones()->create([

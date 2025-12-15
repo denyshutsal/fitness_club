@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->nullable(false)->default(null)->change();
+        Schema::create('roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('role')->unique(); // admin, employee, visitor
+            $table->timestamps();
         });
     }
 
@@ -21,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role')->default('user')->change();
-        });
+        Schema::dropIfExists('roles');
     }
 };
