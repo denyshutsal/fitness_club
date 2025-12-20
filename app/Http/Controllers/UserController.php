@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\User;
+use App\Models\Role;
 
 class UserController extends Controller
 {
@@ -21,7 +23,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $roles = Role::where('role', '!=', 'admin')->get();
+        return view('users.create', compact('roles'));
     }
 
     /**
@@ -35,7 +38,12 @@ class UserController extends Controller
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'role' => ['required', 'in:employee,visitor'],
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where(function ($query) {
+                    $query->where('role', '!=', 'admin');
+                }),
+            ],
             'password' => ['required', 'min:6', 'confirmed'],
             'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
             ], [
@@ -48,8 +56,8 @@ class UserController extends Controller
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role' => $data['role'],
-            'password' => bcrypt($data['password']),
+            'role_id' => $data['role_id'],
+            'password' => $data['password'],
         ]);
 
         // Create a phone (can be null)
@@ -77,7 +85,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit', compact('user'));
+        $roles = Role::where('role', '!=', 'admin')->get();
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -93,7 +102,10 @@ class UserController extends Controller
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
             'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
-            'role' => ['required', 'in:employee,visitor'],
+            'role_id' => [
+                'required',
+                Rule::exists('roles', 'id')->where('role', '!=', 'admin'),
+            ],
             'password' => ['nullable','min:6','confirmed'],
         ], [
             'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
@@ -103,7 +115,7 @@ class UserController extends Controller
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role' => $data['role'],
+            'role_id' => $data['role_id'],
         ]);
 
         // Update or create phone
@@ -122,7 +134,7 @@ class UserController extends Controller
         // Update password if provided
         if (!empty($data['password'])) {
             $user->update([
-                'password' => bcrypt($data['password']),
+                'password' => $data['password'],
             ]);
         }
         

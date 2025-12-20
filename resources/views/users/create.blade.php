@@ -46,12 +46,20 @@
                                 </div>
                             </div>
                             <div class="sm:col-span-2">
-                                <label for="role" class="block text-sm/6 font-semibold text-white">Role</label>
+                                <label for="role_id" class="block text-sm/6 font-semibold text-white">Role</label>
                                 <div class="mt-2.5">
-                                    <select id="role" name="role" autocomplete="role" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
-                                        <option value="employee">Employee</option>
-                                        <option value="visitor">Visitor</option>
+                                    <select id="role_id" name="role_id" autocomplete="role" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white/5 py-1.5 pr-8 pl-3 text-base text-white outline-1 -outline-offset-1 outline-white/10 *:bg-gray-800 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6">
+                                        @foreach ($roles as $role)
+                                            @if ($role->role !== 'admin')
+                                                <option value="{{ $role->id }}">
+                                                    {{ ucfirst($role->role) }}
+                                                </option>
+                                            @endif
+                                         @endforeach
                                     </select>
+                                    @error('role_id')
+                                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="sm:col-span-2">

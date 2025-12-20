@@ -16,7 +16,7 @@
                     <div class="flex flex-col items-center">
                         <img class="w-24 h-24 mb-6 rounded-full" src="https://placehold.co/24x24" alt="{{ $user->name }}"/>
                         <h3 class="mb-2 text-base">{{ $user->name }}</h3>
-                        <p class="mb-2 text-base">{{ $user->role }}</p>
+                        <p class="mb-2 text-base">{{ $user->role->role }}</p>
                         <p class="mb-2 text-base">{{ $user->email }}</p>
                         <p class="mb-2 text-base">{{ $user->phones->first()?->phone ? '+' . $user->phones->first()->phone : 'Phone number not provided' }}</p>
                     </div>

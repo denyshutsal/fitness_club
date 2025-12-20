@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             'role_id' => Role::where('role', 'admin')->first()->id,
             'name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
+            'password' => 'password',
         ]);
 
         $admin->phones()->create([

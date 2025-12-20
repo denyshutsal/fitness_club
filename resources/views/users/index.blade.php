@@ -30,14 +30,14 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <td class="px-4 py-2 text-center">{{ $user->id }}</td>
-                                    <td class="px-4 py-2 text-center">{{ $user->role }}</td>
+                                    <td class="px-4 py-2 text-center">{{ $user->role->role }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->name }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->email }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->phones->first()?->phone ?? '-' }}</td>
                                     <td class="px-4 py-2 text-center">{{ $user->created_at }}</td>
                                     <td class="px-4 py-2 text-center">
                                         <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm">Profile</a>
-                                        @if($user->role !== 'admin')
+                                        @if($user->role->role !== 'admin')
                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm text-green-600">Edit</a>
                                             <form action="{{ route('users.destroy', $user->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
