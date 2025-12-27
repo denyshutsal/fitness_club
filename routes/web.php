@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 Route::redirect('/', '/login');
 Route::redirect('/register', '/login');
@@ -16,6 +17,9 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
     // Users CRUD
     Route::resource('users', UserController::class);
+
+    // Roles CRUD
+    Route::resource('roles', RoleController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
