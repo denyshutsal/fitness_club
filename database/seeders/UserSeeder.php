@@ -15,12 +15,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()
+        User::factory()
             ->count(10)
-            ->state(new Sequence(
-                ['role_id' => 2],
-                ['role_id' => 3]
-            ))
+            ->state([
+                'role_id' => 2, // employee
+            ])
             ->has(Phone::factory())
             ->create();
     }

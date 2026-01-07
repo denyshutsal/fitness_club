@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     public function phones()
     {
-        return $this->hasMany(Phone::class);
+        return $this->morphMany(Phone::class, 'phoneable');
     }
 
     public function role()

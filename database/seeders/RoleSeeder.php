@@ -20,7 +20,6 @@ class RoleSeeder extends Seeder
         Role::insert([
             ['id' => 1, 'role' => 'admin'],
             ['id' => 2, 'role' => 'employee'],
-            ['id' => 3, 'role' => 'visitor'],
         ]);
     }
 }

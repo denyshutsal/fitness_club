@@ -10,7 +10,7 @@ use App\Models\Role;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Show users list
      */
     public function index()
     {
@@ -19,7 +19,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new user
      */
     public function create()
     {
@@ -28,31 +28,29 @@ class UserController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store the user
      */
     public function store(Request $request)
     {
-        // Clear your phone of all characters except numbers
-        $phone = $request->phone ? preg_replace('/\D+/', '', $request->phone) : null;
 
+        // Data validation
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email'],
             'role_id' => [
                 'required',
-                Rule::exists('roles', 'id')->where(function ($query) {
-                    $query->where('role', '!=', 'admin');
-                }),
+                Rule::exists('roles', 'id')->where(fn ($q) => $q->where('role', '!=', 'admin')),
             ],
             'password' => ['required', 'min:6', 'confirmed'],
             'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
-            ], [
-           'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
-            ]
-        );
+        ], [
+            'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
+        ]);
 
-        $data['phone'] = $phone;
+        // Clear a phone of all characters except numbers
+        $phone = $data['phone'] ? preg_replace('/\D+/', '', $data['phone']) : null;
 
+        // Creating a user (password is hashed automatically via cast)
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -60,11 +58,9 @@ class UserController extends Controller
             'password' => $data['password'],
         ]);
 
-        // Create a phone (can be null)
-        if (!empty($data['phone'])) {
-            $user->phones()->create([
-                'phone' => $data['phone'],
-            ]);
+        // Save a phone (can be null)
+        if ($phone) {
+            $user->phones()->create(['phone' => $phone]);
         }
 
         return redirect()
@@ -73,7 +69,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display a specific user
      */
     public function show(User $user)
     {
@@ -81,7 +77,7 @@ class UserController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource
+     * Show the form for editing the specified resource.
      */
     public function edit(User $user)
     {
@@ -90,54 +86,53 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage (including password and phone).
+     * Update the specified resource in storage.
      */
     public function update(Request $request, User $user)
     {
-        
-        // Clear your phone of all characters except numbers
-        $phone = $request->phone ? preg_replace('/\D+/', '', $request->phone) : null;
-
+        // Data validation
         $data = $request->validate([
             'name' => ['required', 'regex:/^[\pL\s\-]+$/u', 'max:255'],
             'email' => ['required', 'email', "unique:users,email,{$user->id}"],
-            'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
             'role_id' => [
                 'required',
-                Rule::exists('roles', 'id')->where('role', '!=', 'admin'),
+                Rule::exists('roles', 'id')->where(fn ($q) => $q->where('role', '!=', 'admin')),
             ],
+            'phone' => ['nullable','string','regex:/^\+7\d{10}$/'],
             'password' => ['nullable','min:6','confirmed'],
         ], [
             'phone.regex' => 'The phone format must be 11 digits starting with 7 (+7XXXXXXXXXX)',
         ]);
 
-        // Update name and email
+        // Clear a phone of all characters except numbers
+        $phone = $data['phone'] ? preg_replace('/\D+/', '', $data['phone']) : null;
+
+        // Updating user data
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
             'role_id' => $data['role_id'],
         ]);
 
-        // Update or create phone
-        $data['phone'] = $phone;
-        
-        if ($user->phones()->exists()) {
-            $user->phones()->first()->update([
-                'phone' => $data['phone'],
-            ]);
+        // Updating or creating a phone
+        if ($phone) {
+            if ($user->phones()->exists()) {
+                $user->phones()->first()->update(['phone' => $phone]);
+            } else {
+                $user->phones()->create(['phone' => $phone]);
+            }
         } else {
-            $user->phones()->create([
-                'phone' => $data['phone'],
-            ]);
+            // If the phone number input field is empty, the number will be deleted
+            if ($user->phones()->exists()) {
+                $user->phones()->first()->delete();
+            }
         }
 
-        // Update password if provided
+        // Update a password if provided
         if (!empty($data['password'])) {
-            $user->update([
-                'password' => $data['password'],
-            ]);
+            $user->update(['password' => $data['password']]);
         }
-        
+
         return redirect()
             ->route('users.index')
             ->with('success', 'User updated successfully');
@@ -149,6 +144,8 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully');
+        return redirect()
+            ->route('users.index')
+            ->with('success', 'User deleted successfully');
     }
 }

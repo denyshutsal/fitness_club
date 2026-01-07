@@ -12,9 +12,9 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <h1 class="text-2xl font-bold mb-4">Roles List</h1>
+                    <h1 class="text-center text-2xl font-bold mb-4">Roles List</h1>
 
-                    <table class="table-auto w-full border">
+                    <table class="table-auto mx-auto border">
                         <thead>
                         <tr>
                             <th class="border px-4 py-2">ID</th>
@@ -60,7 +60,7 @@
                 @endif
 
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="text-center p-6 text-gray-900 dark:text-gray-100">
                         <a href="{{ route('roles.create') }}" class="btn btn-primary">
                             Add role
                         </a>

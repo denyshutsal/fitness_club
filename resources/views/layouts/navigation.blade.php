@@ -19,7 +19,10 @@
                         {{ __('Users') }}
                     </x-nav-link>
                      <x-nav-link :href="route('roles.index')" :active="request()->routeIs('roles.index')">
-                        {{ __('Roles') }}
+                        {{ __('User Roles') }}
+                    </x-nav-link>
+                     <x-nav-link :href="route('visitors.index')" :active="request()->routeIs('visitors.index')">
+                        {{ __('Visitors') }}
                     </x-nav-link>
                 </div>
             </div>

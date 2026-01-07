@@ -7,16 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Phone extends Model
 {
-
+    
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'phone',
+        'is_primary',
     ];
 
-    public function user()
+    public function phoneable()
     {
-        return $this->belongsTo(User::class);
+        return $this->morphTo();
     }
 }
